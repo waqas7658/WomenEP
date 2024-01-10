@@ -4,7 +4,7 @@ import logo from "../assets/logo.png";
 const Navbar = () => {
   return (
     <>
-      <nav className="  bg-pink-500 border-gray-200 dark:bg-gray-900">
+      <nav className="   border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
             href="https://flowbite.com/"
@@ -44,7 +44,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 px-3 text-white bg-pink-500 rounded md:bg-transparent md:text-white md:p-0 dark:text-white md:dark:text-pink-500"
+                  className="block font-bold py-2 px-3 text-pink-500 bg-pink-500 rounded md:bg-transparent md:text-pink-500 md:p-0 dark:text-pink-500 md:dark:text-pink-500"
                   aria-current="page"
                 >
                   Home

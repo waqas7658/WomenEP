@@ -3,7 +3,7 @@ import React from "react";
 const OurMission = () => {
   return (
     <>
-      <section className="our_mission p-5  lg:py-10 lg:px-40">
+      <section className="our_mission p-5  lg:py-20 lg:px-40">
         <div className=" flex flex-col justify-center items-center  gap-5">
           <h1 className=" lg:text-[5rem]  text-[2rem] font-[900] text-pink-500">
             OUR MISSION
