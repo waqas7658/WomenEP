@@ -10,8 +10,12 @@ const CommunityForm = () => {
             Community Forms
           </h1>
         </div>
-
-        <div className=" grid grid-cols-4 gap-2 p-10 ">
+        <div className=" flex justify-start px-10">
+          <button className=" py-2 px-4 bg-pink-700 hover:bg-pink-500  text-white rounded">
+            ADD YOUR BLOG
+          </button>
+        </div>
+        <div className=" grid lg:grid-cols-4 gap-2 p-10 ">
           <FormCard />
           <FormCard />
           <FormCard />
