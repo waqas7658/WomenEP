@@ -3,8 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
-import Navbar from "./Components/navbar";
-
+import Navbar from "./Components/Navbar";
 function App() {
   return (
     <>
