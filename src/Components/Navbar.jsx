@@ -1,20 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("user");
+    const parsedUserData = isAuthenticated ? JSON.parse(isAuthenticated) : null;
+    setUserData(parsedUserData);
+  }, []);
+  const handleSignOut = () => {
+    localStorage.removeItem("user");
+    setUserData(null);
+  };
+
   return (
     <>
       <nav className="   border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a
-            href="https://flowbite.com/"
+          <Link
+            to="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
             <span className="text-white   self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               WomenEP
             </span>
-          </a>
+          </Link>
           <button
             data-collapse-toggle="navbar-default"
             type="button"
@@ -51,6 +65,35 @@ const Navbar = () => {
                 </a>
               </li>
             </ul>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {userData ? (
+              <img
+                className="w-10 h-10 rounded-full"
+                src={userData?.image}
+                alt="Rounded avatar"
+              />
+            ) : (
+              ""
+            )}
+
+            {userData ? (
+              <button
+                onClick={handleSignOut}
+                className="py-2 px-4 bg-pink-700 hover:bg-pink-500 text-white rounded"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                className="py-2 px-4 bg-pink-700 hover:bg-pink-500 text-white rounded"
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </nav>
