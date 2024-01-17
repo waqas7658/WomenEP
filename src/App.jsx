@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
 import Navbar from "./Components/Navbar";
-import FormDetail from "./Pages/FormDetail";
+import FormDetail from "./Pages/CourseDetail";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoutes from "./Utils/ProtectedRoutes";
 import Mentor from "./Pages/Mentor";
 import AddCourses from "./Components/MentorCourses/AddCourses";
+import CourseDetail from "./Pages/CourseDetail";
 function App() {
   return (
     <>
@@ -24,7 +25,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/formDetail/:id" element={<FormDetail />} />
+          <Route path="/courseDetail/:id" element={<CourseDetail />} />
 
           {/* Add more routes as needed */}
         </Routes>
