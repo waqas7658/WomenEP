@@ -3,22 +3,22 @@ import MentorCourseCard from "./MentorCourseCard/MentorCourseCard";
 import { Link } from "react-router-dom";
 import { BASEURL } from "../../Utils/BaseUrl";
 import axios from "axios";
+import FormCard from "../Courses/FormCard/FormCard";
 
 const MentorCourses = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
-  const [blogData, setBlogData] = useState({});
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(blogData);
+  console.log(courses);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${BASEURL}/api/blogs/blog/659e9d1e027d6bec6db2a3fb`
+          `${BASEURL}/api/blogs/getBlogsByMentorId/${user.id}`
         );
 
-        setBlogData(response.data);
+        setCourses(response?.data.data);
       } catch (error) {
         setError(error);
       } finally {
@@ -53,7 +53,9 @@ const MentorCourses = () => {
           </Link>
         </div>
         <div className=" grid lg:grid-cols-4 gap-2 p-10 ">
-          <MentorCourseCard />
+          {courses.map((item, index) => (
+            <FormCard key={index} item={item} />
+          ))}
         </div>
       </section>
     </>

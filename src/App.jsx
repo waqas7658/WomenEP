@@ -10,6 +10,8 @@ import ProtectedRoutes from "./Utils/ProtectedRoutes";
 import Mentor from "./Pages/Mentor";
 import AddCourses from "./Components/MentorCourses/AddCourses";
 import CourseDetail from "./Pages/CourseDetail";
+import CoursesPage from "./Pages/CoursesPage";
+import AboutPage from "./Pages/AboutPage";
 function App() {
   return (
     <>
@@ -25,6 +27,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/aboutus" element={<AboutPage />} />
+          <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courseDetail/:id" element={<CourseDetail />} />
 
           {/* Add more routes as needed */}

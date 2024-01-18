@@ -3,8 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BASEURL } from "../Utils/BaseUrl";
 import toast from "react-hot-toast";
+import profile from "/Images/profile.jpg";
+import Stripe from "stripe";
+import { useStripe, CardElement, useElements } from "@stripe/react-stripe-js";
 
 const CourseDetail = () => {
+  const stripe = useStripe();
+  const elements = useElements();
   const user = JSON.parse(localStorage.getItem("user"));
 
   const id = useParams();
@@ -13,7 +18,7 @@ const CourseDetail = () => {
   const [comment, setComment] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  console.log(course);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,8 +68,56 @@ const CourseDetail = () => {
     }
   };
 
+  ///////////////////// Payment //////////////////////////
+
+  const handleBuynow = async (e) => {
+    e.preventDefault();
+    const reqPacket = {
+      amount: course?.price,
+      currency: "USD",
+      email: user?.email,
+      userId: user?.id,
+    };
+
+    try {
+      const response = await axios.post(
+        `${BASEURL}/api/payment/createPayment`,
+        reqPacket
+      );
+      console.log(response);
+      const { clientSecret } = response.data;
+
+      const { paymentIntent, error } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+          },
+        }
+      );
+
+      if (error) {
+        console.error(error);
+        toast.error("Payment failed. Please try again.");
+      } else if (paymentIntent.status === "succeeded") {
+        console.log("Payment succeeded!");
+        toast.success("Payment succeeded!");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <>
+      <form onSubmit={handleBuynow}>
+        <CardElement />
+        <button type="submit" disabled={!stripe}>
+          Pay Now
+        </button>
+      </form>
+
       <div className="mt-6 bg-gray-50">
         <div className="px-10 py-6 mx-auto">
           {/* Post Author */}
@@ -90,11 +143,19 @@ const CourseDetail = () => {
               </h1>
 
               {/* Post Views */}
-              <div className="flex justify-start items-center gap-3 mt-2">
-                <p className=" font-medium text-xl "> Course Price: </p>
-                <p className="text-xl text-green-500 font-bold bg-gray-100 rounded-full py-2 px-3 hover:text-red-500">
-                  {course?.price}
-                </p>
+              <div className="flex justify-between items-center gap-3 mt-2">
+                <div className=" flex  justify-between items-center gap-3 mt-2">
+                  <p className=" font-medium text-xl "> Course Price: </p>
+                  <p className="text-xl text-green-500 font-bold bg-gray-100 rounded-full py-2 px-3 hover:text-red-500">
+                    $ {course?.price}
+                  </p>
+                </div>
+                <button
+                  onClick={handleBuynow}
+                  className="py-2 px-4 bg-pink-700 hover:bg-pink-500 text-white rounded"
+                >
+                  Buy Now
+                </button>
               </div>
             </div>
 
@@ -147,52 +208,27 @@ const CourseDetail = () => {
             </p>
 
             {/* Comment 1 */}
-            <div className="flex items-center w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 xl:w-2/3">
-              <a href="#" className="flex items-center mt-6 mb-6 mr-6">
+            {course?.comment?.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 xl:w-2/3"
+              >
                 <img
-                  src="https://avatars.githubusercontent.com/u/71964085?v=4"
-                  alt="avatar"
-                  className="hidden object-cover w-14 h-14 mx-4 rounded-full sm:block"
+                  src={profile}
+                  alt="profile"
+                  className="w-16 h-16 rounded-full me-4"
                 />
-              </a>
-              <div>
-                <h3 className="text-lg font-bold text-purple-500 sm:text-xl md:text-2xl">
-                  By James Amos
-                </h3>
-                <p className="text-sm font-bold text-gray-300">
-                  August 22, 2021
-                </p>
-                <p className="mt-2 text-base text-gray-600 sm:text-lg md:text-normal">
-                  Please help with how you did the migrations for the blog
-                  database fields. I tried mine using exactly what you
-                  instructed but it's not working!!.
-                </p>
-              </div>
-            </div>
+                <div>
+                  <h3 className="text-lg font-bold text-purple-500 sm:text-xl md:text-2xl">
+                    {item?.userId.name}
+                  </h3>
 
-            {/* Comment 2 */}
-            <div className="flex items-center w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 xl:w-2/3">
-              <a href="#" className="flex items-center mt-6 mb-6 mr-6">
-                <img
-                  src="https://avatars.githubusercontent.com/u/71964085?v=4"
-                  alt="avatar"
-                  className="hidden object-cover w-14 h-14 mx-4 rounded-full sm:block"
-                />
-              </a>
-              <div>
-                <h3 className="text-lg font-bold text-purple-500 sm:text-xl md:text-2xl">
-                  By James Amos
-                </h3>
-                <p className="text-sm font-bold text-gray-300">
-                  August 22, 2021
-                </p>
-                <p className="mt-2 text-base text-gray-600 sm:text-lg md:text-normal">
-                  Especially I don't understand the concepts of multiple models.
-                  What really is the difference between the blog model and
-                  blogApp model? Am stuck
-                </p>
+                  <p className="mt-2 text-base text-gray-600 sm:text-lg md:text-normal">
+                    {item?.message}
+                  </p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -64,6 +64,15 @@ const Navbar = () => {
                   Home
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/aboutus"
+                  className="block font-bold py-2 px-3 text-pink-500 bg-pink-500 rounded md:bg-transparent md:text-pink-500 md:p-0 dark:text-pink-500 md:dark:text-pink-500"
+                  aria-current="page"
+                >
+                  About Us
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="flex flex-wrap gap-3">
