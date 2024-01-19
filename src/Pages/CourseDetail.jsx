@@ -1,16 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BASEURL } from "../Utils/BaseUrl";
 import toast from "react-hot-toast";
 import profile from "/Images/profile.jpg";
-import Stripe from "stripe";
-import { useStripe, CardElement, useElements } from "@stripe/react-stripe-js";
+// import Stripe from "stripe";
+import {
+  useStripe,
+  CardElement,
+  useElements,
+  Elements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "../Components/CheckoutForm";
+import Checkout from "../Components/Checkout";
+
+const stripePromise = loadStripe(
+  "pk_test_51MqAR9AaUQ4WyfXOQEq7XO6LKUoTsdTycKGed2oCsthMwjbvOT8GrZNQ4NxklNsO6VIkyeQUjJD5loawReFoHdwd000AEPBns9"
+);
 
 const CourseDetail = () => {
-  const stripe = useStripe();
-  const elements = useElements();
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   const id = useParams();
 
@@ -18,20 +29,24 @@ const CourseDetail = () => {
   const [comment, setComment] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(course);
+  const [secret, setSecret] = useState("");
+  const [showCheckout, setShowCheckout] = useState(false);
+
+  /////////////// fetching course detail ////////////
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${BASEURL}/api/blogs/blog/${id.id}`);
+
+      setCourse(response?.data.data);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${BASEURL}/api/blogs/blog/${id.id}`);
-
-        setCourse(response?.data.data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -67,7 +82,6 @@ const CourseDetail = () => {
       console.error(error);
     }
   };
-
   ///////////////////// Payment //////////////////////////
 
   const handleBuynow = async (e) => {
@@ -79,45 +93,39 @@ const CourseDetail = () => {
       userId: user?.id,
     };
 
-    try {
-      const response = await axios.post(
-        `${BASEURL}/api/payment/createPayment`,
-        reqPacket
-      );
-      console.log(response);
-      const { clientSecret } = response.data;
+    if (user) {
+      try {
+        const response = await axios.post(
+          `${BASEURL}/api/payment/createPayment`,
+          reqPacket
+        );
+        console.log(response);
 
-      const { paymentIntent, error } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-          },
+        if (response.status === 200) {
+          setSecret(response?.data.clientSecret);
+          setShowCheckout(true);
         }
-      );
 
-      if (error) {
+        if (error) {
+          console.error(error);
+          toast.error("Payment failed. Please try again.");
+        }
+      } catch (error) {
         console.error(error);
-        toast.error("Payment failed. Please try again.");
-      } else if (paymentIntent.status === "succeeded") {
-        console.log("Payment succeeded!");
-        toast.success("Payment succeeded!");
+        toast.error("An error occurred. Please try again.");
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("An error occurred. Please try again.");
+    } else {
+      navigate("/login");
     }
   };
 
   return (
     <>
-      <form onSubmit={handleBuynow}>
-        <CardElement />
-        <button type="submit" disabled={!stripe}>
-          Pay Now
-        </button>
-      </form>
-
+      {showCheckout && (
+        <Elements stripe={stripePromise} options={{ clientSecret: secret }}>
+          <Checkout />
+        </Elements>
+      )}
       <div className="mt-6 bg-gray-50">
         <div className="px-10 py-6 mx-auto">
           {/* Post Author */}

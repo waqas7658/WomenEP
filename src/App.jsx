@@ -12,6 +12,7 @@ import AddCourses from "./Components/MentorCourses/AddCourses";
 import CourseDetail from "./Pages/CourseDetail";
 import CoursesPage from "./Pages/CoursesPage";
 import AboutPage from "./Pages/AboutPage";
+import Profile from "./Pages/Profile";
 function App() {
   return (
     <>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/aboutus" element={<AboutPage />} />
           <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/courseDetail/:id" element={<CourseDetail />} />
 
           {/* Add more routes as needed */}
