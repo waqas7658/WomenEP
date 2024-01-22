@@ -13,6 +13,7 @@ import CourseDetail from "./Pages/CourseDetail";
 import CoursesPage from "./Pages/CoursesPage";
 import AboutPage from "./Pages/AboutPage";
 import Profile from "./Pages/Profile";
+import Footer from "./Components/Footer";
 function App() {
   return (
     <>
@@ -35,6 +36,7 @@ function App() {
 
           {/* Add more routes as needed */}
         </Routes>
+        <Footer />
       </Router>
     </>
   );

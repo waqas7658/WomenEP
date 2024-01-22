@@ -26,7 +26,7 @@ const Navbar = () => {
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
-            <span className="text-white   self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="text-pink-500   self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               WomenEP
             </span>
           </Link>
@@ -72,6 +72,15 @@ const Navbar = () => {
                   aria-current="page"
                 >
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/courses"
+                  className="block font-bold py-2 px-3 text-pink-500 bg-pink-500 rounded md:bg-transparent md:text-pink-500 md:p-0 dark:text-pink-500 md:dark:text-pink-500"
+                  aria-current="page"
+                >
+                  Courses
                 </Link>
               </li>
             </ul>
