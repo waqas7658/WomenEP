@@ -53,6 +53,7 @@ const Login = () => {
     } catch (error) {
       // Handle errors
       console.error("Error submitting form:", error);
+      toast.error("Try Again or Register");
     }
   };
 

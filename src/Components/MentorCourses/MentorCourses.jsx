@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import MentorCourseCard from "./MentorCourseCard/MentorCourseCard";
+
 import { Link } from "react-router-dom";
 import { BASEURL } from "../../Utils/BaseUrl";
 import axios from "axios";
-import FormCard from "../Courses/FormCard/FormCard";
+import MentorCourseCard from "./MentorCourseCard/MentorCourseCard";
 
 const MentorCourses = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -54,7 +54,7 @@ const MentorCourses = () => {
         </div>
         <div className=" grid lg:grid-cols-4 gap-2 p-10 ">
           {courses.map((item, index) => (
-            <FormCard key={index} item={item} />
+            <MentorCourseCard key={index} item={item} setCourses={setCourses} />
           ))}
         </div>
       </section>

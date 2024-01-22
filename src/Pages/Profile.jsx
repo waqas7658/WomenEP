@@ -42,7 +42,8 @@ const Profile = () => {
                 </div>
                 <div className="flex flex-col items-center">
                   <img
-                    src={profileData?.image}
+                    // src={profileData?.image}
+                    src={`${BASEURL}/user/${profileData?.image}`}
                     className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   ></img>
                   <h1 className="text-xl font-bold">{profileData?.name}</h1>

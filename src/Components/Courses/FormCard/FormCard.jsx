@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import courseImage from "/Images/courseImage.jpg";
 const FormCard = ({ item }) => {
-  console.log(item);
   const navigate = useNavigate();
 
   const { _id, title, description, image, isFree, price, comment } = item;
@@ -14,10 +13,10 @@ const FormCard = ({ item }) => {
           <a href="#">
             {image ? (
               <img
-                className="rounded-t-lg"
+                className="rounded-t-lg h-[300px] w-full object-cover"
                 // src={item?.image}
-                src={`http://localhost:5000/${image.replace("\\", "/")}`}
-                // src={`http://localhost:5000//api/blogs/${image}`}
+                // src={`http://localhost:5000/${image.replace("\\", "/")}`}
+                src={`http://localhost:5000/blog/${image}`}
                 alt=""
               />
             ) : (
@@ -30,10 +29,10 @@ const FormCard = ({ item }) => {
                 {title}
               </h5>
             </a>
-            <p className="font-normal text-gray-700 mb-3 line-clamp-3">
+            <p className="font-normal text-gray-700 mb-3 line-clamp-1">
               {description}
             </p>
-            <p className="font-normal text-gray-700 mb-3 line-clamp-3">
+            <p className="font-normal text-gray-700 mb-3 line-clamp-1">
               Price: {price}
             </p>
             <button

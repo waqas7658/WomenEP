@@ -5,7 +5,7 @@ import profile from "/Images/profile.jpg";
 const Navbar = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-
+  console.log(userData);
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("user");
     const parsedUserData = isAuthenticated ? JSON.parse(isAuthenticated) : null;
@@ -88,7 +88,7 @@ const Navbar = () => {
                   {userData?.image ? (
                     <img
                       className="w-10 h-10 rounded-full"
-                      src={userData?.image}
+                      src={`http://localhost:5000/user/${userData?.image}`}
                       alt="Rounded avatar"
                     />
                   ) : (
