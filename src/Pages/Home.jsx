@@ -3,6 +3,7 @@ import MainBanner from "../Components/MainBanner/MainBanner";
 
 import OurMission from "../Components/OurMission/OurMission";
 import Courses from "../Components/Courses/Courses";
+import Jobs from "../Components/Jobs/Jobs";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <OurMission />
 
       <Courses />
+      <Jobs />
     </>
   );
 };

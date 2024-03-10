@@ -14,6 +14,8 @@ import CoursesPage from "./Pages/CoursesPage";
 import AboutPage from "./Pages/AboutPage";
 import Profile from "./Pages/Profile";
 import Footer from "./Components/Footer";
+import JobPage from "./Pages/JobPage";
+
 function App() {
   return (
     <>
@@ -31,6 +33,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/aboutus" element={<AboutPage />} />
           <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/career" element={<JobPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/courseDetail/:id" element={<CourseDetail />} />
 

@@ -14,6 +14,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../Components/CheckoutForm";
 import Checkout from "../Components/Checkout";
+import Chat from "../Components/Chat";
 
 const stripePromise = loadStripe(
   "pk_test_51MqAR9AaUQ4WyfXOQEq7XO6LKUoTsdTycKGed2oCsthMwjbvOT8GrZNQ4NxklNsO6VIkyeQUjJD5loawReFoHdwd000AEPBns9"
@@ -26,6 +27,7 @@ const CourseDetail = () => {
   const id = useParams();
 
   const [course, setCourse] = useState();
+  const [chatModule, setChatModule] = useState(false);
   const [comment, setComment] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -57,6 +59,7 @@ const CourseDetail = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
+
 
   ///////////////  Posting comment //////////////////////////
   const handleSubmit = async (e) => {
@@ -129,7 +132,7 @@ const CourseDetail = () => {
           <Checkout />
         </Elements>
       )}
-      <div className="mt-6 bg-gray-50">
+      <div className="mt-6 bg-gray-50 relative">
         <div className="px-10 py-6 mx-auto">
           {/* Post Author */}
           <div className="max-w-6xl px-10 py-6 mx-auto bg-gray-50">
@@ -220,6 +223,7 @@ const CourseDetail = () => {
               </form>
             </div>
           </div>
+          <div></div>
 
           {/* Comments */}
           <div className="max-w-4xl px-10 py-16 mx-auto bg-gray-100 bg-white min-w-screen animation-fade animation-delay px-0 px-8 mx-auto sm:px-12 xl:px-5">
@@ -252,6 +256,19 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
+      <button
+        onClick={() => setChatModule(true)}
+        className="text-xl absolute bottom-10 right-10 text-green-500 font-bold bg-gray-100 rounded-full py-2 px-3 hover:text-red-500 z-10"
+      >
+        Chat
+      </button>
+      {/* Chat Box */}
+      {chatModule && (
+        <div className="fixed bottom-20 right-10 bg-white p-4 shadow-lg rounded-lg">
+          {/* Add your chat component here */}
+          <Chat recieverId={course.authorId._id} />
+        </div>
+      )}
     </>
   );
 };
