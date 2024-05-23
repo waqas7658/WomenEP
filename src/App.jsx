@@ -15,6 +15,8 @@ import AboutPage from "./Pages/AboutPage";
 import Profile from "./Pages/Profile";
 import Footer from "./Components/Footer";
 import JobPage from "./Pages/JobPage";
+import SafetyAndLegal from "./Pages/SafetyAndLegal";
+import AddSafetyForm from "./Components/Safety/AddSafetyForm";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path="/mentor" element={<Mentor />} />
             <Route path="/addcourse" element={<AddCourses />} />
+            <Route path="/safety" element={<Mentor />} />
+            <Route path="/addSafety" element={<AddSafetyForm />} />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -36,6 +40,8 @@ function App() {
           <Route path="/career" element={<JobPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/courseDetail/:id" element={<CourseDetail />} />
+          <Route path="/safetyDetail/:id" element={<SafetyDetail />} />
+          <Route path="/safetyAndLegalSupport" element={<SafetyAndLegal />} />
 
           {/* Add more routes as needed */}
         </Routes>

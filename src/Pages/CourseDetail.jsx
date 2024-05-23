@@ -256,19 +256,19 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
-      <button
+      {/* <button
         onClick={() => setChatModule(true)}
         className="text-xl absolute bottom-10 right-10 text-green-500 font-bold bg-gray-100 rounded-full py-2 px-3 hover:text-red-500 z-10"
       >
         Chat
-      </button>
+      </button> */}
       {/* Chat Box */}
-      {chatModule && (
+      {/* {chatModule && (
         <div className="fixed bottom-20 right-10 bg-white p-4 shadow-lg rounded-lg">
-          {/* Add your chat component here */}
+         
           <Chat recieverId={course.authorId._id} />
         </div>
-      )}
+      )} */}
     </>
   );
 };
