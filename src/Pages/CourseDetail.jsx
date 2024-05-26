@@ -60,7 +60,6 @@ const CourseDetail = () => {
     return <p>Error: {error.message}</p>;
   }
 
-
   ///////////////  Posting comment //////////////////////////
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -173,7 +172,7 @@ const CourseDetail = () => {
                 <div className=" flex  justify-between items-center gap-3 mt-2">
                   <p className=" font-medium text-xl "> Course Instructor </p>
                   <p className="text-xl text-green-500 font-bold bg-gray-100 rounded-full py-2 px-3 hover:text-red-500">
-                    {course?.authorId.name}
+                    {course?.authorId?.name}
                   </p>
                 </div>
               </div>

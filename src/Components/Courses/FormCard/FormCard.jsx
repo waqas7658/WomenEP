@@ -5,7 +5,7 @@ const FormCard = ({ item }) => {
   const navigate = useNavigate();
 
   const { _id, title, description, image, isFree, price, comment } = item;
-
+  console.log(item);
   return (
     <>
       <div className="">

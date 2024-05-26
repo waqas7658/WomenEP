@@ -31,10 +31,13 @@ const SafetyMainCard = ({ item }) => {
             <p className="font-normal text-gray-700 mb-3 line-clamp-1">
               {description}
             </p>
-            <p className="font-normal text-gray-700 mb-3">
-              Location: {location}
+            <p className="font-normal text-gray-700 mb-3  line-clamp-1">
+              <span className="font-semibold">Location:</span> {location}
             </p>
-            <p className="font-normal text-gray-700 mb-3">Date: {date}</p>
+            <p className="font-normal text-gray-700 mb-3">
+              {" "}
+              <span className="font-semibold">Date:</span> {date}
+            </p>
             <button
               onClick={() => {
                 navigate(`/safetyDetail/${_id}`);

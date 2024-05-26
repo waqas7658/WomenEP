@@ -17,6 +17,7 @@ import Footer from "./Components/Footer";
 import JobPage from "./Pages/JobPage";
 import SafetyAndLegal from "./Pages/SafetyAndLegal";
 import AddSafetyForm from "./Components/Safety/AddSafetyForm";
+import SafetyDetail from "./Components/Safety/SafetyDetail";
 
 function App() {
   return (
