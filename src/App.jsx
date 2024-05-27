@@ -18,6 +18,7 @@ import JobPage from "./Pages/JobPage";
 import SafetyAndLegal from "./Pages/SafetyAndLegal";
 import AddSafetyForm from "./Components/Safety/AddSafetyForm";
 import SafetyDetail from "./Components/Safety/SafetyDetail";
+import Chat from "./Pages/Chat";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/courseDetail/:id" element={<CourseDetail />} />
           <Route path="/safetyDetail/:id" element={<SafetyDetail />} />
           <Route path="/safetyAndLegalSupport" element={<SafetyAndLegal />} />
+          <Route path="/chat" element={<Chat />} />
 
           {/* Add more routes as needed */}
         </Routes>

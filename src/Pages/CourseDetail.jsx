@@ -15,13 +15,16 @@ import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../Components/CheckoutForm";
 import Checkout from "../Components/Checkout";
 import Chat from "../Components/Chat";
+import { io } from "socket.io-client";
 
 const stripePromise = loadStripe(
   "pk_test_51MqAR9AaUQ4WyfXOQEq7XO6LKUoTsdTycKGed2oCsthMwjbvOT8GrZNQ4NxklNsO6VIkyeQUjJD5loawReFoHdwd000AEPBns9"
 );
+const socket = io("http://localhost:5000"); // Adjust the URL based on your server configuration
 
 const CourseDetail = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
   const navigate = useNavigate();
 
   const id = useParams();
@@ -33,6 +36,68 @@ const CourseDetail = () => {
   const [error, setError] = useState(null);
   const [secret, setSecret] = useState("");
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showChat, setShowChat] = useState(false); // State for chat visibility
+
+  // State variables
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [previousMessages, setPreviousMessages] = useState([]);
+  console.log(messages);
+  // Function to send a message via socket
+  const sendMessage = (message) => {
+    console.log(message);
+    socket.emit("sendMsg", { text: message });
+  };
+
+  // Effect hook for receiving messages via socket
+  useEffect(() => {
+    socket.on("getMessage", (data) => {
+      setMessages([...messages, data.text]);
+    });
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [messages]);
+
+  // Effect hook for online users via socket
+  useEffect(() => {
+    socket.on("onlineUsers", ({ users }) => {
+      console.log("Online users:", users);
+    });
+    return () => {
+      socket.off("onlineUsers");
+    };
+  }, []);
+
+  // Function to handle sending a message
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (newMessage.trim()) {
+      setMessages([...messages, newMessage]);
+      sendMessage(newMessage);
+      setNewMessage("");
+    }
+  };
+
+  // Toggle chat visibility
+  const toggleChat = () => {
+    setShowChat((prevShowChat) => !prevShowChat);
+  };
+
+  const fetchPreviousMessages = async () => {
+    try {
+      const response = await axios.post(`${BASEURL}/api/chat/getMessages`, {
+        // Add any necessary parameters
+      });
+      setPreviousMessages(response.data.messages);
+    } catch (error) {
+      console.error("Error fetching previous messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPreviousMessages();
+  }, [comment]);
 
   /////////////// fetching course detail ////////////
 
@@ -226,48 +291,78 @@ const CourseDetail = () => {
 
           {/* Comments */}
           <div className="max-w-4xl px-10 py-16 mx-auto bg-gray-100 bg-white min-w-screen animation-fade animation-delay px-0 px-8 mx-auto sm:px-12 xl:px-5">
-            <p className="mt-1 text-2xl font-bold text-left text-gray-800 sm:mx-6 sm:text-2xl md:text-3xl lg:text-4xl sm:text-center sm:mx-0">
-              All comments on this post
+            <p className="mt-1 text-2xl font-bold text-left text-gray-900 md:text-2xl">
+              Course Reviews
             </p>
 
-            {/* Comment 1 */}
-            {course?.comment?.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 xl:w-2/3"
-              >
-                <img
-                  src={profile}
-                  alt="profile"
-                  className="w-16 h-16 rounded-full me-4"
-                />
-                <div>
-                  <h3 className="text-lg font-bold text-purple-500 sm:text-xl md:text-2xl">
-                    {item?.userId?.name}
-                  </h3>
-
-                  <p className="mt-2 text-base text-gray-600 sm:text-lg md:text-normal">
-                    {item?.message}
-                  </p>
-                </div>
-              </div>
-            ))}
+            <ul className="mt-6 ">
+              {course?.comments?.map((comment, index) => (
+                <li key={index} className="flex flex-col mt-6">
+                  <div className="flex items-center">
+                    <img
+                      src={profile}
+                      alt="Profile"
+                      className="object-cover w-10 h-10 rounded-full"
+                    />
+                    <h3 className="ml-4 text-sm font-medium text-gray-900">
+                      {comment?.userId?.name}
+                    </h3>
+                  </div>
+                  <p className="mt-2 text-gray-600">{comment?.message}</p>
+                </li>
+              ))}
+            </ul>
           </div>
+
+          {/* Chat Button */}
+          <button
+            onClick={toggleChat}
+            className="fixed bottom-5 right-5 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg"
+          >
+            {showChat ? "Close Chat" : "Open Chat"}
+          </button>
+
+          {/* Chat Container */}
+          {showChat && (
+            <div className="fixed bottom-16 right-5 z-50 bg-white shadow-lg rounded-lg w-80 h-96 p-4">
+              <div className="flex flex-col h-full">
+                <div className="flex-1 overflow-y-auto">
+                  {messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`my-2 p-2 rounded-lg ${
+                        message.type === "user" // Check if the message is sent by the user
+                          ? "bg-blue-200 text-blue-900 self-end" // Apply user's message styling
+                          : "bg-gray-200 text-gray-900" // Apply received message styling
+                      }`}
+                    >
+                      <p className=" text-black"> {message}</p>
+                    </div>
+                  ))}
+                </div>
+                <form
+                  onSubmit={handleSendMessage}
+                  className="flex items-center mt-4"
+                >
+                  <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    className="flex-1 border rounded-lg p-2"
+                    placeholder="Type a message..."
+                  />
+                  <button
+                    type="submit"
+                    className="ml-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-2"
+                  >
+                    Send
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      {/* <button
-        onClick={() => setChatModule(true)}
-        className="text-xl absolute bottom-10 right-10 text-green-500 font-bold bg-gray-100 rounded-full py-2 px-3 hover:text-red-500 z-10"
-      >
-        Chat
-      </button> */}
-      {/* Chat Box */}
-      {/* {chatModule && (
-        <div className="fixed bottom-20 right-10 bg-white p-4 shadow-lg rounded-lg">
-         
-          <Chat recieverId={course.authorId._id} />
-        </div>
-      )} */}
     </>
   );
 };
