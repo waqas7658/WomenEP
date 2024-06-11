@@ -19,6 +19,8 @@ import SafetyAndLegal from "./Pages/SafetyAndLegal";
 import AddSafetyForm from "./Components/Safety/AddSafetyForm";
 import SafetyDetail from "./Components/Safety/SafetyDetail";
 import Chat from "./Pages/Chat";
+import PasswordReset from "./Components/PasswordReset";
+import ForgetPassword from "./Components/ForgetPassword";
 
 function App() {
   return (
@@ -45,6 +47,8 @@ function App() {
           <Route path="/safetyDetail/:id" element={<SafetyDetail />} />
           <Route path="/safetyAndLegalSupport" element={<SafetyAndLegal />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/resetpassword" element={<PasswordReset />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
 
           {/* Add more routes as needed */}
         </Routes>
